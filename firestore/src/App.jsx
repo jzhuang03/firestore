@@ -1,26 +1,27 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
+import { db } from "../firebase";
+import { addDoc, collection } from "firebase/firestore";
 
 function App() {
   const [answer, setAnswer] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(answer);
+    const docRef = await addDoc(collection(db, "answers"), {
+      answer: answer,
+    });
+    console.log("created doc with id: ", docRef.id);
   };
 
   return (
     <>
-      <h1> Hello! </h1>
-      <h2> What tasks do you need to do today? </h2>
+      <h1>Welcome!</h1>
       <form onSubmit={handleSubmit}>
-        <label> Answer: </label>
-        {/* With onChange, keep track of user changing their answers*/}
+        <label> Answer:</label>
         <input type="text" onChange={(e) => setAnswer(e.target.value)}></input>
-        <br />
-        <button type="submit"> Submit </button>
+        <br></br>
+        <button type="submit">Submit</button>
       </form>
     </>
   );
